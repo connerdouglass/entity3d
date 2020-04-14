@@ -1,4 +1,6 @@
 #include "window.h"
+#include "node.h"
+#include "timing.h"
 #include <string>
 #include <cstdint>
 #include <GLFW/glfw3.h>
@@ -7,9 +9,10 @@
 #define WIN_DEFAULT_HEIGHT 600
 #define WIN_DEFAULT_TITLE "My Window"
 
-static int x = 100;
-
 Window::Window() {
+
+    // Initialize GLFW
+    glfwInit();
 
     // Set the handle to null
     this->handle = NULL;
@@ -35,6 +38,9 @@ Window::~Window() {
         this->handle = NULL;
 
     }
+
+    // Terminate GLFW
+    glfwTerminate();
 
 }
 
@@ -73,4 +79,86 @@ void Window::getResolution(uint16_t* width, uint16_t* height) const {
 
 }
 
+Node* Window::getRootNode() {
 
+    // Return a pointer to the node
+    return &this->rootNode;
+
+}
+
+void Window::loop() {
+
+    // The timestamp on the previous iteration
+    long lastTimestampMs = get_system_time_ms();
+
+    // Loop while the window is open
+    while (!glfwWindowShouldClose(this->handle)) {
+
+        // Poll events (mouse, keyboard, resize)
+        glfwPollEvents();
+
+        // Get the timestamp now
+        long nowMs = get_system_time_ms();
+
+        // Figure out the delta
+        long dt = float(nowMs - lastTimestampMs) / 1000.0f;
+
+        // Update the root node
+        this->rootNode.updateAll(dt);
+
+        // Render the root node
+        this->rootNode.renderAll();
+
+        // Push the last timestamp
+        lastTimestampMs = nowMs;
+
+        // Swap the buffers (double-buffering)
+        glfwSwapBuffers(this->handle);
+
+        if (glfwGetKey(this->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            break;
+        } else if (glfwGetKey(this->handle, GLFW_KEY_UP) == GLFW_PRESS) {
+            this->enterFullscreen();
+        } else if (glfwGetKey(this->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
+            this->exitFullscreen(20, 20, 600, 400, 60);
+        }
+
+    }
+
+}
+
+void Window::enterFullscreen() {
+
+    // If there is no handle
+    if (!this->handle) return;
+
+    // Get the primary monitor
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    // glfwMonitor
+
+    // Make the window fill the monitor
+    glfwSetWindowMonitor(this->handle, monitor, 0, 0, 0, 0, 0);
+
+}
+
+void Window::exitFullscreen(
+    uint16_t x,
+    uint16_t y,
+    uint16_t width,
+    uint16_t height,
+    uint16_t refreshRate) {
+
+    // If there is no handle
+    if (!this->handle) return;
+
+    // Exit fullscreen
+    glfwSetWindowMonitor(
+        this->handle,
+        NULL,
+        int(x),
+        int(y),
+        int(width),
+        int(height),
+        int(refreshRate));
+
+}

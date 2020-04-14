@@ -10,7 +10,12 @@ mkdir -p out
 
 # Compile the project
 g++ \
+    -std=c++14 \
     src/main.cpp \
+    src/monitor.cpp \
+    src/node.cpp \
+    src/root_node.cpp \
+    src/timing.cpp \
     src/window.cpp \
     \
     -o \
