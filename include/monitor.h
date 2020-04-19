@@ -10,6 +10,7 @@ class Monitor {
 public:
 
     static std::vector<Monitor> all();
+    static Monitor primary();
 
     Monitor(GLFWmonitor* handle);
 

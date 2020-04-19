@@ -1,4 +1,5 @@
 #include "root_node.h"
+#include "render_context.h"
 
 void RootNode::updateAll(float dt) {
 
@@ -9,7 +10,16 @@ void RootNode::updateAll(float dt) {
 
 void RootNode::renderAll() const {
 
+    // Create a rendering context for this pass
+    RenderContext ctx;
+
+    // Push a layer for the root
+    RenderContextLayer* layer = ctx.push();
+
     // Call the render function
     this->_render();
+
+    // Pop the layer
+    ctx.pop();
 
 }

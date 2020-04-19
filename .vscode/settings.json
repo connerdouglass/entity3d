@@ -4,6 +4,7 @@
         "ios": "cpp",
         "vector": "cpp",
         "chrono": "cpp",
-        "__config": "cpp"
+        "__config": "cpp",
+        "stack": "cpp"
     }
 }

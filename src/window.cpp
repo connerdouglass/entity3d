@@ -1,9 +1,10 @@
+#include <string>
+#include <cstdint>
+#include <iostream>
+#include <GLFW/glfw3.h>
 #include "window.h"
 #include "node.h"
 #include "timing.h"
-#include <string>
-#include <cstdint>
-#include <GLFW/glfw3.h>
 
 #define WIN_DEFAULT_WIDTH 800
 #define WIN_DEFAULT_HEIGHT 600
@@ -117,13 +118,23 @@ void Window::loop() {
 
         if (glfwGetKey(this->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
             break;
-        } else if (glfwGetKey(this->handle, GLFW_KEY_UP) == GLFW_PRESS) {
+        } else if (!this->isFullscreen() && glfwGetKey(this->handle, GLFW_KEY_UP) == GLFW_PRESS) {
             this->enterFullscreen();
         } else if (glfwGetKey(this->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            this->exitFullscreen(20, 20, 600, 400, 60);
+            this->exitFullscreen(20, 20, 600, 400);
         }
 
     }
+
+}
+
+bool Window::isFullscreen() const {
+
+    // Get the monitor for the window
+    GLFWmonitor* monitor = glfwGetWindowMonitor(this->handle);
+
+    // NULL indicates not fullscreen, non-NULL is fullscreen
+    return monitor != NULL;
 
 }
 
@@ -134,10 +145,19 @@ void Window::enterFullscreen() {
 
     // Get the primary monitor
     GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-    // glfwMonitor
+
+    // Get the video mode
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
     // Make the window fill the monitor
-    glfwSetWindowMonitor(this->handle, monitor, 0, 0, 0, 0, 0);
+    glfwSetWindowMonitor(
+        this->handle,
+        monitor,
+        0,
+        0,
+        mode->width,
+        mode->height,
+        mode->refreshRate);
 
 }
 
@@ -145,8 +165,7 @@ void Window::exitFullscreen(
     uint16_t x,
     uint16_t y,
     uint16_t width,
-    uint16_t height,
-    uint16_t refreshRate) {
+    uint16_t height) {
 
     // If there is no handle
     if (!this->handle) return;
@@ -159,6 +178,10 @@ void Window::exitFullscreen(
         int(y),
         int(width),
         int(height),
-        int(refreshRate));
+        GLFW_DONT_CARE);
 
+}
+
+bool Window::isKeyPressed(int key) const {
+    return glfwGetKey(this->handle, key) == GLFW_PRESS;
 }

@@ -24,6 +24,16 @@ std::vector<Monitor> Monitor::all() {
 
 }
 
+Monitor Monitor::primary() {
+
+    // Get the primary monitor
+    GLFWmonitor* primary = glfwGetPrimaryMonitor();
+
+    // Create a Monitor wrapper
+    return Monitor(primary);
+
+}
+
 Monitor::Monitor(GLFWmonitor* handle) {
 
     // Save the handle
