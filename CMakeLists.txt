@@ -15,6 +15,7 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/deps/glfw")
 add_executable(
     GameEngine
     src/main.cpp
+    # src/math/matrix.cpp
     src/monitor.cpp
     src/node.cpp
     src/render_context.cpp
@@ -31,4 +32,5 @@ target_include_directories(
     GameEngine PUBLIC
     "${PROJECT_SOURCE_DIR}/include"
     "${PROJECT_SOURCE_DIR}/deps/glfw/include"
+    "${PROJECT_SOURCE_DIR}/deps/entity3d-math/include"
 )
