@@ -51,10 +51,10 @@ void ShaderProgram::compile(
     glEnableVertexAttribArray(this->position_attrib);
     glVertexAttribPointer(
         this->position_attrib,
-        2,
+        3,
         GL_FLOAT,
         GL_FALSE,
-        sizeof(float) * 5,
+        sizeof(float) * 6,
         (void *) 0
     );
 
@@ -64,7 +64,7 @@ void ShaderProgram::compile(
         3,
         GL_FLOAT,
         GL_FALSE,
-        sizeof(float) * 5,
+        sizeof(float) * 6,
         (void *)(sizeof(float) * 2)
     );
 

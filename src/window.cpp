@@ -15,24 +15,24 @@
 
 static const struct
 {
-float x, y;
+float x, y, z;
 float r, g, b;
 } vertices[3] =
 {
-{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
-{  0.6f, -0.4f, 0.f, 1.f, 0.f },
-{   0.f,  0.6f, 0.f, 0.f, 1.f }
+{ -0.6f, -0.4f, 0.0f, 1.f, 0.f, 0.f },
+{  0.6f, -0.4f, 0.0f, 0.f, 1.f, 0.f },
+{   0.f,  0.6f, 0.0f, 0.f, 0.f, 1.f }
 };
 
 static const char* vert =
 "#version 110\n"
 "uniform mat4 MVP;\n"
 "attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
+"attribute vec3 vPos;\n"
 "varying vec3 color;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
+"    gl_Position = MVP * vec4(vPos, 1.0);\n"
 "    color = vCol;\n"
 "}\n";
 
@@ -51,6 +51,7 @@ Window::Window() {
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
     // Set the handle to null
     this->handle = NULL;
@@ -145,6 +146,11 @@ void Window::loop() {
     );
     sp.activate();
 
+    glEnable(GL_DEPTH_TEST); // Depth Testing
+    glDepthFunc(GL_LEQUAL);
+    // glDisable(GL_CULL_FACE);
+    // glCullFace(GL_BACK);
+
     // The timestamp on the previous iteration
     long lastTimestampMs = get_system_time_ms();
 
@@ -156,27 +162,29 @@ void Window::loop() {
         float ratio = (float)width / (float)height;
  
         glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearDepth(1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        e3d::Mat4 m = e3d::Mat4::identity();
-        m = e3d::utils::mat::mat4_rotate_yxz(m, 0, 0, (float)glfwGetTime());
-
-        // e3d::Mat4 p = e3d::utils::projection::mat4_create_perspective(
-        //     45.0f,
-        //     ratio,
-        //     0.1f,
-        //     10.0f
-        // );
-
-        e3d::Mat4 p = e3d::utils::projection::mat4_create_orthographic(
-            -ratio,
+        e3d::Mat4 p = e3d::utils::projection::mat4_create_perspective(
+            60.0f,
             ratio,
-            -1,
-            1,
-            1, -1
+            0.1f,
+            100.0f
         );
 
-        e3d::Mat4 mvp = p * m;
+        // e3d::Mat4 p = e3d::utils::projection::mat4_create_orthographic(
+        //     -ratio,
+        //     ratio,
+        //     -1, 1,
+        //     1, -1
+        // );
+
+        e3d::Mat4 v = e3d::Mat4::identity();
+        v = v * e3d::utils::mat::mat4_create_translation(0, 0, -1.0f - glfwGetTime() / 5.0f);
+        e3d::Mat4 m = e3d::Mat4::identity();
+        m = m * e3d::utils::mat::mat4_create_rotation_y(glfwGetTime());
+
+        e3d::Mat4 mvp = p * v * m;
 
         glUniformMatrix4fv(
             sp.mvp_uniform,
