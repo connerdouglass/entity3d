@@ -3,11 +3,11 @@
 #include <iostream>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <e3dmath/e3dmath.h>
 #include "window.h"
 #include "node.h"
 #include "timing.h"
 #include "shader_program.h"
+#include <e3dmath/e3dmath.h>
 
 #define WIN_DEFAULT_WIDTH 800
 #define WIN_DEFAULT_HEIGHT 600

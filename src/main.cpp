@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 #include "window.h"
-// #include <e3dmath/e3dmath.h>
+#include <e3dmath/e3dmath.h>
 
 int main(int argc, char** argv) {
 
