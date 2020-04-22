@@ -1,19 +1,56 @@
 #include <string>
 #include <cstdint>
 #include <iostream>
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
+#include <e3dmath/e3dmath.h>
 #include "window.h"
 #include "node.h"
 #include "timing.h"
+#include "shader_program.h"
 
 #define WIN_DEFAULT_WIDTH 800
 #define WIN_DEFAULT_HEIGHT 600
 #define WIN_DEFAULT_TITLE "My Window"
 
+static const struct
+{
+float x, y;
+float r, g, b;
+} vertices[3] =
+{
+{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
+{  0.6f, -0.4f, 0.f, 1.f, 0.f },
+{   0.f,  0.6f, 0.f, 0.f, 1.f }
+};
+
+static const char* vert =
+"#version 110\n"
+"uniform mat4 MVP;\n"
+"attribute vec3 vCol;\n"
+"attribute vec2 vPos;\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
+"    color = vCol;\n"
+"}\n";
+
+static const char* frag =
+"#version 110\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_FragColor = vec4(color, 1.0);\n"
+"}\n";
+
 Window::Window() {
 
     // Initialize GLFW
     glfwInit();
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // Set the handle to null
     this->handle = NULL;
@@ -26,6 +63,10 @@ Window::Window() {
         NULL,
         NULL
     );
+
+    glfwMakeContextCurrent(this->handle);
+    gladLoadGL(glfwGetProcAddress);
+    glfwSwapInterval(1);
     
 }
 
@@ -89,11 +130,62 @@ Node* Window::getRootNode() {
 
 void Window::loop() {
 
+    GLuint vb;
+    glGenBuffers(1, &vb);
+    glBindBuffer(GL_ARRAY_BUFFER, vb);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    ShaderProgram sp;
+    sp.compile(
+        vert,
+        frag,
+        "MVP",
+        "vPos",
+        "vCol"
+    );
+    sp.activate();
+
     // The timestamp on the previous iteration
     long lastTimestampMs = get_system_time_ms();
 
     // Loop while the window is open
     while (!glfwWindowShouldClose(this->handle)) {
+
+        int width, height;
+        glfwGetFramebufferSize(this->handle, &width, &height);
+        float ratio = (float)width / (float)height;
+ 
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        e3d::Mat4 m = e3d::Mat4::identity();
+        m = e3d::utils::mat::mat4_rotate_yxz(m, 0, 0, (float)glfwGetTime());
+
+        // e3d::Mat4 p = e3d::utils::projection::mat4_create_perspective(
+        //     45.0f,
+        //     ratio,
+        //     0.1f,
+        //     10.0f
+        // );
+
+        e3d::Mat4 p = e3d::utils::projection::mat4_create_orthographic(
+            -ratio,
+            ratio,
+            -1,
+            1,
+            1, -1
+        );
+
+        e3d::Mat4 mvp = p * m;
+
+        glUniformMatrix4fv(
+            sp.mvp_uniform,
+            1,
+            GL_FALSE,
+            (const GLfloat*) mvp.data
+        );
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Poll events (mouse, keyboard, resize)
         glfwPollEvents();

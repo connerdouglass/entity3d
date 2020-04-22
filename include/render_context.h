@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stack>
+// #include <e3dmath/e3dmath.h>
 
 struct RenderContextLayer {
 
@@ -9,6 +10,11 @@ struct RenderContextLayer {
      * singly-linked list which can be traversed by parents.
      */
     RenderContextLayer* parent;
+
+    /**
+     * The model view matrix for the context layer
+     */
+    // e3d::Mat4 modelViewMatrix;
 
 };
 

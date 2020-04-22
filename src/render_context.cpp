@@ -19,6 +19,9 @@ RenderContextLayer* RenderContext::push() {
     // Create a new render context
     RenderContextLayer* newTop = new RenderContextLayer();
 
+    // Start the matrix at identity
+    // newTop->modelViewMatrix = e3d::Mat4::identity();
+
     // Move the new layer to the top
     newTop->parent = this->top;
     this->top = newTop;
