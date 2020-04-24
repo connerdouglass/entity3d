@@ -21,6 +21,6 @@ public:
 
     GeometryNode();
     void update(float dt) override;
-    void render(RenderContext& ctx) const override;
+    void render(RenderContextLayer* layer) const override;
 
 };

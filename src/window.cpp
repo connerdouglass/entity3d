@@ -131,11 +131,6 @@ Node* Window::getRootNode() {
 
 void Window::loop() {
 
-    GLuint vb;
-    glGenBuffers(1, &vb);
-    glBindBuffer(GL_ARRAY_BUFFER, vb);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
     ShaderProgram sp;
     sp.compile(
         vert,
@@ -144,7 +139,12 @@ void Window::loop() {
         "vPos",
         "vCol"
     );
-    sp.activate();
+    // sp.activate();
+
+    // GLuint vb;
+    // glGenBuffers(1, &vb);
+    // glBindBuffer(GL_ARRAY_BUFFER, vb);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glEnable(GL_DEPTH_TEST); // Depth Testing
     glDepthFunc(GL_LEQUAL);
@@ -157,49 +157,18 @@ void Window::loop() {
     // Loop while the window is open
     while (!glfwWindowShouldClose(this->handle)) {
 
+        // Get the size and aspect ratio of the window
         int width, height;
         glfwGetFramebufferSize(this->handle, &width, &height);
         float ratio = (float)width / (float)height;
  
+        // Setup the viewport coordinate system
         glViewport(0, 0, width, height);
+
+        // Clear the contents of the screen
         glClearDepth(1.0);
+        glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        e3d::Mat4 p = e3d::utils::projection::mat4_create_perspective(
-            45.0f,
-            ratio,
-            0.1f,
-            10.0f
-        );
-
-        // e3d::Mat4 p = e3d::utils::projection::mat4_create_orthographic(
-        //     -ratio,
-        //     ratio,
-        //     -1, 1,
-        //     1, -1
-        // );
-
-        // // View matrix (replace soon with -camera matrix)
-        // e3d::Mat4 v = e3d::Mat4::identity();
-        // v = v * e3d::utils::mat::mat4_create_translation(0, 0, -2.0f - glfwGetTime() / 5.0f);
-
-        // // Model matrix, for positioning the contents of the scene
-        // // e3d::Mat4 m = e3d::Mat4::identity();
-        // // m = m * e3d::utils::mat::mat4_create_rotation_yxz(glfwGetTime(), glfwGetTime(), glfwGetTime());
-
-        // // Combine them to convert model coordinates to clip coordinates
-        // e3d::Mat4 mvp = p * v;// * m;
-
-        // glUniformMatrix4fv(
-        //     sp.mvp_uniform,
-        //     1,
-        //     GL_FALSE,
-        //     (const GLfloat*) mvp.data
-        // );
-
-        // std::cout << "Y: \n" << mvp << std::endl;
-
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Poll events (mouse, keyboard, resize)
         glfwPollEvents();
@@ -213,6 +182,14 @@ void Window::loop() {
         // Update the root node
         this->rootNode.updateAll(dt);
 
+        // Create a projection matrix. Eventually we will render this from a camera
+        e3d::Mat4 p = e3d::utils::projection::mat4_create_perspective(
+            45.0f,
+            ratio,
+            0.1f,
+            10.0f
+        );
+
         // Render the root node
         this->rootNode.renderAll(p, &sp);
 
@@ -222,13 +199,13 @@ void Window::loop() {
         // Swap the buffers (double-buffering)
         glfwSwapBuffers(this->handle);
 
-        if (glfwGetKey(this->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
-            break;
-        } else if (!this->isFullscreen() && glfwGetKey(this->handle, GLFW_KEY_UP) == GLFW_PRESS) {
-            this->enterFullscreen();
-        } else if (glfwGetKey(this->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
-            this->exitFullscreen(20, 20, 600, 400);
-        }
+        // if (glfwGetKey(this->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        //     break;
+        // } else if (!this->isFullscreen() && glfwGetKey(this->handle, GLFW_KEY_UP) == GLFW_PRESS) {
+        //     this->enterFullscreen();
+        // } else if (glfwGetKey(this->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        //     this->exitFullscreen(20, 20, 600, 400);
+        // }
 
     }
 

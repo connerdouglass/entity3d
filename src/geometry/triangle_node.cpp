@@ -33,6 +33,11 @@ void TriangleNode::update(float dt) {
         // Add the vertex data to the buffer
         glBufferData(GL_ARRAY_BUFFER, sizeof(TRIANGLE_VERTICES), TRIANGLE_VERTICES, GL_STATIC_DRAW);
 
+    }
+
+    // If the vertex buffer is zero
+    if (this->vertex_buffer == 0) {
+
         // Save the vertex buffer on this object
         this->vertex_buffer = TRIANGLE_VB;
 

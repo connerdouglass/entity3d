@@ -48,26 +48,6 @@ void ShaderProgram::compile(
     this->position_attrib = glGetAttribLocation(this->handle, pos_attrib_name);
     this->color_attrib = glGetAttribLocation(this->handle, color_attrib_name);
 
-    glEnableVertexAttribArray(this->position_attrib);
-    glVertexAttribPointer(
-        this->position_attrib,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(float) * 6,
-        (void *) 0
-    );
-
-    glEnableVertexAttribArray(this->color_attrib);
-    glVertexAttribPointer(
-        this->color_attrib,
-        3,
-        GL_FLOAT,
-        GL_FALSE,
-        sizeof(float) * 6,
-        (void *)(sizeof(float) * 2)
-    );
-
 }
 
 void ShaderProgram::activate() {

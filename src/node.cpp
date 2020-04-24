@@ -28,18 +28,23 @@ void Node::_render(RenderContext& ctx) const {
     layer->modelViewMatrix = e3d::utils::mat::mat4_rotate_yxz(layer->modelViewMatrix, this->rotation);
 
     // Use the program
-    if (layer->shaderProgram) layer->shaderProgram->activate();
+    if (layer->shaderProgram) {
 
-    // Set the model view matrix
-    glUniformMatrix4fv(
-        layer->shaderProgram->mvp_uniform,
-        1,
-        GL_FALSE,
-        (const GLfloat*) layer->modelViewMatrix.data
-    );
+        // Use the shader program
+        layer->shaderProgram->activate();
+
+        // Set the model view matrix
+        glUniformMatrix4fv(
+            layer->shaderProgram->mvp_uniform,
+            1,
+            GL_FALSE,
+            (const GLfloat*) layer->modelViewMatrix.data
+        );
+
+    }
 
     // Render the node
-    this->render(ctx);
+    this->render(layer);
 
     // Loop through the children
     for (auto &childPtr : this->children) {

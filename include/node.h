@@ -42,6 +42,6 @@ public:
     void addChild(std::shared_ptr<Node> child);
 
     virtual void update(float dt) {};
-    virtual void render(RenderContext& ctx) const {};
+    virtual void render(RenderContextLayer* layer) const {};
 
 };
