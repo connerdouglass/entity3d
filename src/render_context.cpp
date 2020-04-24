@@ -25,10 +25,16 @@ RenderContextLayer* RenderContext::push() {
         // Copy the parent matrix as the starting point for this one
         newTop->modelViewMatrix = e3d::Mat4(this->top->modelViewMatrix);
 
+        // Copy the pointer to the shader program
+        newTop->shaderProgram = this->top->shaderProgram;
+
     } else {
 
         // Default to the identity matrix
         newTop->modelViewMatrix = e3d::Mat4::identity();
+
+        // Set the shader program to null
+        newTop->shaderProgram = NULL;
 
     }
 

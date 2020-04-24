@@ -17,6 +17,13 @@ class Node {
      */
     std::vector< std::shared_ptr<Node> > children;
 
+protected:
+
+    void _update(float dt);
+    void _render(RenderContext& ctx) const;
+
+public:
+
     /**
      * The position of the node, relative to its parent
      */
@@ -27,16 +34,14 @@ class Node {
      */
     e3d::Vec3 rotation;
 
-protected:
-
-    void _update(float dt);
-    void _render(RenderContext& ctx) const;
-
-public:
+    Node() {
+        this->position = e3d::Vec4::zeros();
+        this->rotation = e3d::Vec3::zeros();
+    }
 
     void addChild(std::shared_ptr<Node> child);
 
-    void update(float dt) {};
-    void render(RenderContext& ctx) const {};
+    virtual void update(float dt) {};
+    virtual void render(RenderContext& ctx) const {};
 
 };

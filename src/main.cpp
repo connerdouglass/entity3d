@@ -2,8 +2,9 @@
 #include <glad/gl.h>
 #include <iostream>
 #include <memory>
-#include "window.h"
 #include <e3dmath/e3dmath.h>
+#include "window.h"
+#include "geometry/triangle_node.h"
 
 int main(int argc, const char** argv) {
 
@@ -14,8 +15,9 @@ int main(int argc, const char** argv) {
     // win.enterFullscreen();
 
     // Add our scene to the root node
-    // std::shared_ptr<Node> node (new Node());
-    // win.getRootNode()->addChild(node);
+    std::shared_ptr<TriangleNode> node (new TriangleNode());
+    node->position = e3d::Vec4((float[]){ 0, 0, -5, 0 });
+    win.getRootNode()->addChild(node);
 
     // Run the event loop
     win.loop();

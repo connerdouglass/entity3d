@@ -2,6 +2,7 @@
 
 #include <stack>
 #include <e3dmath/e3dmath.h>
+#include "shader_program.h"
 
 struct RenderContextLayer {
 
@@ -15,6 +16,11 @@ struct RenderContextLayer {
      * The model view matrix for the context layer
      */
     e3d::Mat4 modelViewMatrix;
+
+    /**
+     * The shader program to use for this layer
+     */
+    ShaderProgram* shaderProgram;
 
 };
 

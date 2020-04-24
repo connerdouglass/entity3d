@@ -24,6 +24,26 @@ void Node::_render(RenderContext& ctx) const {
 
     // Push to the render stack
     RenderContextLayer* layer = ctx.push();
+    // layer->modelViewMatrix = e3d::utils::mat::mat4_translate(layer->modelViewMatrix, this->position);
+    layer->modelViewMatrix = layer->modelViewMatrix * e3d::utils::mat::mat4_create_translation(
+        this->position.x(),
+        this->position.y(),
+        this->position.z()
+    );
+    layer->modelViewMatrix = e3d::utils::mat::mat4_rotate_yxz(layer->modelViewMatrix, this->rotation);
+
+    // Use the program
+    if (layer->shaderProgram) layer->shaderProgram->activate();
+
+    // Set the model view matrix
+    glUniformMatrix4fv(
+        layer->shaderProgram->mvp_uniform,
+        1,
+        GL_FALSE,
+        (const GLfloat*) layer->modelViewMatrix.data
+    );
+
+    std::cout << "X: \n" << layer->modelViewMatrix << std::endl;
 
     // Render the node
     this->render(ctx);

@@ -179,25 +179,27 @@ void Window::loop() {
         //     1, -1
         // );
 
-        // View matrix (replace soon with -camera matrix)
-        e3d::Mat4 v = e3d::Mat4::identity();
-        v = v * e3d::utils::mat::mat4_create_translation(0, 0, -2.0f - glfwGetTime() / 5.0f);
+        // // View matrix (replace soon with -camera matrix)
+        // e3d::Mat4 v = e3d::Mat4::identity();
+        // v = v * e3d::utils::mat::mat4_create_translation(0, 0, -2.0f - glfwGetTime() / 5.0f);
 
-        // Model matrix, for positioning the contents of the scene
-        e3d::Mat4 m = e3d::Mat4::identity();
-        m = m * e3d::utils::mat::mat4_create_rotation_yxz(glfwGetTime(), glfwGetTime(), glfwGetTime());
+        // // Model matrix, for positioning the contents of the scene
+        // // e3d::Mat4 m = e3d::Mat4::identity();
+        // // m = m * e3d::utils::mat::mat4_create_rotation_yxz(glfwGetTime(), glfwGetTime(), glfwGetTime());
 
-        // Combine them to convert model coordinates to clip coordinates
-        e3d::Mat4 mvp = p * v * m;
+        // // Combine them to convert model coordinates to clip coordinates
+        // e3d::Mat4 mvp = p * v;// * m;
 
-        glUniformMatrix4fv(
-            sp.mvp_uniform,
-            1,
-            GL_FALSE,
-            (const GLfloat*) mvp.data
-        );
+        // glUniformMatrix4fv(
+        //     sp.mvp_uniform,
+        //     1,
+        //     GL_FALSE,
+        //     (const GLfloat*) mvp.data
+        // );
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // std::cout << "Y: \n" << mvp << std::endl;
+
+        // glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Poll events (mouse, keyboard, resize)
         glfwPollEvents();
@@ -212,7 +214,7 @@ void Window::loop() {
         this->rootNode.updateAll(dt);
 
         // Render the root node
-        this->rootNode.renderAll();
+        this->rootNode.renderAll(p, &sp);
 
         // Push the last timestamp
         lastTimestampMs = nowMs;

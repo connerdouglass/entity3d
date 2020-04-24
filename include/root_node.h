@@ -7,6 +7,6 @@ class RootNode : public Node {
 public:
 
     void updateAll(float dt);
-    void renderAll() const;
+    void renderAll(e3d::Mat4& p, ShaderProgram* sp) const;
 
 };

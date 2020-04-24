@@ -27,6 +27,8 @@ add_executable(
     src/shader_program.cpp
     src/timing.cpp
     src/window.cpp
+    src/geometry/geometry_node.cpp
+    src/geometry/triangle_node.cpp
 )
 
 # Link all dependencies to the GameEngine
