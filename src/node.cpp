@@ -24,12 +24,12 @@ void Node::_render(RenderContext& ctx) const {
 
     // Push to the render stack
     RenderContextLayer* layer = ctx.push();
-    // layer->modelViewMatrix = e3d::utils::mat::mat4_translate(layer->modelViewMatrix, this->position);
-    layer->modelViewMatrix = layer->modelViewMatrix * e3d::utils::mat::mat4_create_translation(
-        this->position.x(),
-        this->position.y(),
-        this->position.z()
-    );
+    layer->modelViewMatrix = e3d::utils::mat::mat4_translate(layer->modelViewMatrix, this->position);
+    // layer->modelViewMatrix = layer->modelViewMatrix * e3d::utils::mat::mat4_create_translation(
+    //     this->position.x(),
+    //     this->position.y(),
+    //     this->position.z()
+    // );
     layer->modelViewMatrix = e3d::utils::mat::mat4_rotate_yxz(layer->modelViewMatrix, this->rotation);
 
     // Use the program
