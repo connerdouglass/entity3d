@@ -5,7 +5,7 @@
 #include "window.h"
 #include <e3dmath/e3dmath.h>
 
-int main(int argc, char** argv) {
+int main(int argc, const char** argv) {
 
     // Create the window
     Window win;
@@ -14,7 +14,6 @@ int main(int argc, char** argv) {
     // win.enterFullscreen();
 
     // Add our scene to the root node
-    // ...
     // std::shared_ptr<Node> node (new Node());
     // win.getRootNode()->addChild(node);
 

@@ -17,7 +17,7 @@ void RootNode::renderAll() const {
     RenderContextLayer* layer = ctx.push();
 
     // Call the render function
-    this->_render();
+    this->_render(ctx);
 
     // Pop the layer
     ctx.pop();

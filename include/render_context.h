@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stack>
-// #include <e3dmath/e3dmath.h>
+#include <e3dmath/e3dmath.h>
 
 struct RenderContextLayer {
 
@@ -14,7 +14,7 @@ struct RenderContextLayer {
     /**
      * The model view matrix for the context layer
      */
-    // e3d::Mat4 modelViewMatrix;
+    e3d::Mat4 modelViewMatrix;
 
 };
 

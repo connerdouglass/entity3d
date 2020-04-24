@@ -20,17 +20,23 @@ void Node::_update(float dt) {
     }
 }
 
-void Node::_render() const {
+void Node::_render(RenderContext& ctx) const {
+
+    // Push to the render stack
+    RenderContextLayer* layer = ctx.push();
 
     // Render the node
-    this->render();
+    this->render(ctx);
 
     // Loop through the children
     for (auto &childPtr : this->children) {
 
         // Render the child
-        childPtr->_render();
+        childPtr->_render(ctx);
 
     }
+
+    // Pop from the stack
+    ctx.pop();
 
 }
