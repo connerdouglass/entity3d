@@ -13,17 +13,6 @@
 #define WIN_DEFAULT_HEIGHT 600
 #define WIN_DEFAULT_TITLE "My Window"
 
-static const struct
-{
-float x, y, z;
-float r, g, b;
-} vertices[3] =
-{
-{ -0.6f, -0.4f, 0.0f, 1.f, 0.f, 0.f },
-{  0.6f, -0.4f, 0.0f, 0.f, 1.f, 0.f },
-{   0.f,  0.6f, 0.0f, 0.f, 0.f, 1.f }
-};
-
 static const char* vert =
 "#version 110\n"
 "uniform mat4 MVP;\n"
