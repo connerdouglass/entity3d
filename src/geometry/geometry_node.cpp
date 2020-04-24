@@ -16,7 +16,7 @@ void GeometryNode::update(float dt) {
 }
 
 void GeometryNode::render(RenderContext& ctx) const {
-std::cout << "Render geometry" << std::endl;
+
     // If there is a vertex buffer
     if (this->vertex_buffer != 0) {
 
