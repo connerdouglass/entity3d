@@ -166,7 +166,7 @@ void Window::loop() {
         long nowMs = get_system_time_ms();
 
         // Figure out the delta
-        long dt = float(nowMs - lastTimestampMs) / 1000.0f;
+        float dt = float(nowMs - lastTimestampMs) / 1000.0f;
 
         // Update the root node
         this->rootNode.updateAll(dt);

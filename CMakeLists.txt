@@ -29,6 +29,7 @@ add_executable(
     src/window.cpp
     src/geometry/geometry_node.cpp
     src/geometry/triangle_node.cpp
+    src/physics/physics_node.cpp
 )
 
 # Link all dependencies to the GameEngine
